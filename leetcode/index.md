@@ -9,4 +9,4 @@
     [23题合并列表](https://guixiaole.github.io/CSnote/leetcode/html/23)
 + 回溯
 
-    [79单词搜索](https://guixiaole.github.io/CSnote/leetcode/html/23)
+    [79单词搜索](https://guixiaole.github.io/CSnote/leetcode/html/79)
