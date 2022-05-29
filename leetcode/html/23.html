@@ -137,7 +137,56 @@
 <li><p>分治法</p>
 <p>  针对前面的代码是不是存在有优化的可能性呢？观察前面的代码，是每一次的合并时间复杂度都增加n，那么如果采用多路合并的思想，即如果每次合并都增加n，那么可以在最底层的时候，便多路合并，这样便减少每次增加的n次，但每次的合并应该是
   $\frac{k}{2^i} \times 2^in$，而总共需要logk次的合并，因此该代码的时间复杂度为 $O(nk\times logk)$。代码如下：</p>
-<pre><code class="lang-Java">
+<pre><code class="lang-Java">  public  ListNode mergeKLists(ListNode[] lists){
+      return merge(lists,0,lists.length-1);
+  }
+  public  ListNode merge(ListNode[] lists,int l,int r){
+      if(l==r){
+          return lists[l];
+      }
+      if (l&gt;r){
+          return null;
+      }
+      int mid = (l+r)&gt;&gt;1;
+      return mergeTwoLists(merge(lists,l,mid),merge(lists,mid+1,r));
+  }
+</code></pre>
+</li>
+<li><p>优先队列</p>
+<p>  前面说的方法，使用k个数组来维护每个链表中的最小值，每次取数组中的最小值。可以使用优先队列进行数组的维护，而不是使用k个数组来维护，因此该时间复杂度同样也是 $O(nk\times logk)$。代码如下：</p>
+<pre><code class="lang-Java">   public  class Status implements Comparable&lt;Status&gt;{
+      int val;
+      ListNode ptr;
+      Status(int val,ListNode ptr){
+          this.val = val;
+          this.ptr = ptr;
+      }
+      @Override
+      public int compareTo(Status o) {
+          return this.val - o.val;
+      }
+  }
+
+  public  ListNode mergeKLists(ListNode[] lists){
+      PriorityQueue&lt;Status&gt;queue = new PriorityQueue&lt;&gt;();
+      for(ListNode node: lists){
+          if (node!=null){
+              queue.offer(new Status(node.val,node));
+          }
+      }
+      ListNode head = new ListNode(0);
+      ListNode tail = head;
+      while (!queue.isEmpty()){
+          Status node = queue.poll();
+          tail.next = node.ptr;
+          tail = tail.next;
+          if(node.ptr.next!=null){
+              queue.offer(new Status(node.ptr.next.val,node.ptr.next));
+
+          }
+      }
+      return head.next;
+  }
 </code></pre>
 </li>
 </ul>
