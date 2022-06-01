@@ -1,7 +1,7 @@
 <html>
   <head>
 	  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <title>i5ting_ztree_toc:index</title>
+    <title>i5ting_ztree_toc:123</title>
 		<link href="toc/style/github-bf51422f4bb36427d391e4b75a1daa083c2d840e.css" media="all" rel="stylesheet" type="text/css"/>
 		<link href="toc/style/github2-d731afd4f624c99a4b19ad69f3083cd6d02b81d5.css" media="all" rel="stylesheet" type="text/css"/>
 		<link href="toc/css/zTreeStyle/zTreeStyle.css" media="all" rel="stylesheet" type="text/css"/>
@@ -65,23 +65,43 @@
 				</div>
         <div id='readme' style='width:70%;margin-left:20%;'>
           	<article class='markdown-body'>
-            	<h1 id="-leetcode-">桂乐的leetcode集合</h1>
-<pre><code>刷题的时候遇到类型题会写一下题解，但不一定全部写，看心情，争取每天一道leetcode，写了之后就会放入到这里
-</code></pre><h2 id="-">题解集合</h2>
-<ul>
-<li><p>优先队列</p>
-<p>  <a href="https://guixiaole.github.io/CSnote/leetcode/html/23">23题合并列表</a></p>
-</li>
-<li><p>回溯</p>
-<p>  <a href="https://guixiaole.github.io/CSnote/leetcode/html/79">79单词搜索</a></p>
-</li>
-<li><p>滑动窗口</p>
-	<p>  <a href="https://guixiaole.github.io/CSnote/leetcode/html/76">76最小覆盖子串</a></p>
-	</li>
-	<li><p>哈希</p>
-		<p>  <a href="https://guixiaole.github.io/CSnote/leetcode/html/123">123最长连续序列</a></p>
-		</li>
-</ul>
+            	<h1 id="-">最长连续序列</h1>
+<h2 id="-">问题描述</h2>
+<p>给定一个未排序的整数数组 nums ，找出数字连续的最长序列（不要求序列元素在原数组中连续）的长度。</p>
+<p>请你设计并实现时间复杂度为 O(n) 的算法解决此问题。
+示例 1：</p>
+<p>输入：nums = [100,4,200,1,3,2]
+输出：4
+解释：最长数字连续序列是 [1, 2, 3, 4]。它的长度为 4。
+示例 2：</p>
+<p>输入：nums = [0,3,7,2,5,8,4,6,0,1]
+输出：9</p>
+<h2 id="-">解题思路</h2>
+<p>当面对这种问题的时候，最简单的方法当然是排序，但排序的时间复杂度是O(nlogn)，因此不采用排序的时候，最先想到的应该是使用空间换时间的方式，而当面对乱序的时候，最好的空间不是数组，而是hash表。因此，首先想到的就是hash表。其次，当我们使用hash表的时候，如何才能找到连续的序列呢？为什么不能找到一个最小的值，从而找到所有的序列，（ 最大值也可以）因为中间值的时候，需要向左或者向右进行查找，从而查找能力单一，当我们找到了一组连续序列中的最值，我们因此一直向前找，从而能够找到该序列的最长记录。本次代码使用了HashMap存储，而官方题解中给出了Set，个人觉得Set是最适合本题的数据结构，但自己给出了hash的解题，就没有修改。代码如下：</p>
+<pre><code class="lang-Java">class Solution {
+    public int longestConsecutive(int[] nums) {
+    Map&lt;Integer,Integer&gt; map = new HashMap&lt;&gt;();
+        for (int i = 0;i&lt;nums.length;i++){
+            map.put(nums[i],0);
+        }
+        int maxLen =0;
+        for(Integer i : map.keySet()){
+            if (!map.containsKey(i-1)){
+                int last  =i+1;
+                int len = 1;
+                while (map.containsKey(last)){
+                    len++;
+                    last++;
+                }
+                if (len&gt;maxLen){
+                    maxLen=len;
+                }
+            }
+        }
+        return maxLen;
+    }
+}
+</code></pre>
 
           	</article>
         </div>
