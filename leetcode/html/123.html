@@ -223,10 +223,10 @@ public int count() {
 <p>  路径优化比平衡性优化更为常用
   使用了路径优化，就不能使用平衡性优化。</p>
 <h4 id="-">解题答案</h4>
-<p><code>`</code>Java
+<p><code>
 class Solution {
- public  int longestConsecutive(int[] nums) {</p>
-<pre><code>  UF uf = new UF(nums.length);
+ public  int longestConsecutive(int[] nums) {
+ UF uf = new UF(nums.length);
   Map&lt;Integer,Integer&gt; map = new HashMap&lt;&gt;();
   for (int i = 0;i&lt;nums.length;i++){
       if (map.containsKey(nums[i])) continue;
@@ -240,9 +240,9 @@ class Solution {
       map.put(nums[i],i);
   }
   return uf.getMaxConnects();
-</code></pre><p>  }
-   class UF{</p>
-<pre><code>  private int count;
+ }
+   class UF{
+    private int count;
   private int [] parent;
   private int []size;
   public UF(int n){
@@ -299,7 +299,7 @@ class Solution {
 </p>
 </li>
 </ul>
-<p><code>`</code></p>
+
 
           	</article>
         </div>
