@@ -1,7 +1,7 @@
 <html>
   <head>
 	  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <title>i5ting_ztree_toc:index</title>
+    <title>i5ting_ztree_toc:84</title>
 		<link href="toc/style/github-bf51422f4bb36427d391e4b75a1daa083c2d840e.css" media="all" rel="stylesheet" type="text/css"/>
 		<link href="toc/style/github2-d731afd4f624c99a4b19ad69f3083cd6d02b81d5.css" media="all" rel="stylesheet" type="text/css"/>
 		<link href="toc/css/zTreeStyle/zTreeStyle.css" media="all" rel="stylesheet" type="text/css"/>
@@ -65,26 +65,37 @@
 				</div>
         <div id='readme' style='width:70%;margin-left:20%;'>
           	<article class='markdown-body'>
-            	<h1 id="-leetcode-">桂乐的leetcode集合</h1>
-<pre><code>刷题的时候遇到类型题会写一下题解，但不一定全部写，看心情，争取每天一道leetcode，写了之后就会放入到这里
-</code></pre><h2 id="-">题解集合</h2>
-<ul>
-<li><p>优先队列</p>
-<p>  <a href="https://guixiaole.github.io/CSnote/leetcode/html/23">23题合并列表</a></p>
-</li>
-<li><p>回溯</p>
-<p>  <a href="https://guixiaole.github.io/CSnote/leetcode/html/79">79单词搜索</a></p>
-</li>
-<li><p>滑动窗口</p>
-	<p>  <a href="https://guixiaole.github.io/CSnote/leetcode/html/76">76最小覆盖子串</a></p>
-	</li>
-	<li><p>哈希</p>
-		<p>  <a href="https://guixiaole.github.io/CSnote/leetcode/html/123">123最长连续序列</a></p>
-		</li>
-		<li><p>单调栈</p>
-			<p>  <a href="https://guixiaole.github.io/CSnote/leetcode/html/84">84柱状图中最大的矩形</a></p>
-			</li>
-</ul>
+            	<h1 id="-">柱状图中最大的矩形</h1>
+<h2 id="-">问题描述</h2>
+<p>给定 n 个非负整数，用来表示柱状图中各个柱子的高度。每个柱子彼此相邻，且宽度为 1 。
+求在该柱状图中，能够勾勒出来的矩形的最大面积。
+输入：heights = [2,1,5,6,2,3]
+输出：10</p>
+<h2 id="-">解决方案</h2>
+<h3 id="-">暴力破解</h3>
+<p>首先想到的就是暴力破解，第一层for循环，第二层便是向左向右找到比当前的height[i]还要小的数字，这样便可以找到当前的height的左右边界。但是该算法时间复杂度是$ O(n^2)$，可能时间不过</p>
+<h3 id="-">单调栈</h3>
+<p>上述的暴力破解需要向左或者向右找到边界，但是单调栈中就存了边界，可以直接找到该边界，从而能够找到最值。另外单调栈指的是栈内存的数字为单调递增或者单调递减。本回答中存了单调递增的。并且为了解决边界问题，在原始数组中的开头与结尾加入0。代码如下：</p>
+<pre><code class="lang-Java"> public static int largestRectangleArea(int[] heights) {
+        // 使用单调栈，遇到比自己小的则栈顶出栈。并且在开头和结尾加上0。
+        int newHeights[] = new int[heights.length+2];
+        newHeights[0]=0;
+        newHeights[heights.length+1] = 0;
+        for (int i=1;i&lt;heights.length+1;i++){
+            newHeights[i] = heights[i-1];
+        }
+        int ans = 0;
+        Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;();
+        for(int i = 0;i&lt;newHeights.length;i++){
+            while (!stack.isEmpty() &amp;&amp; (newHeights[stack.peek()]&gt;newHeights[i])){
+                int l = stack.pop();
+                ans = Math.max(ans,(i-stack.peek()-1)*newHeights[l]);
+            }
+            stack.push(i);
+        }
+        return ans;
+    }
+</code></pre>
 
           	</article>
         </div>
