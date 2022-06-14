@@ -1,7 +1,7 @@
 <html>
   <head>
 	  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <title>i5ting_ztree_toc:index</title>
+    <title>i5ting_ztree_toc:560</title>
 		<link href="toc/style/github-bf51422f4bb36427d391e4b75a1daa083c2d840e.css" media="all" rel="stylesheet" type="text/css"/>
 		<link href="toc/style/github2-d731afd4f624c99a4b19ad69f3083cd6d02b81d5.css" media="all" rel="stylesheet" type="text/css"/>
 		<link href="toc/css/zTreeStyle/zTreeStyle.css" media="all" rel="stylesheet" type="text/css"/>
@@ -65,29 +65,42 @@
 				</div>
         <div id='readme' style='width:70%;margin-left:20%;'>
           	<article class='markdown-body'>
-            	<h1 id="-leetcode-">桂乐的leetcode集合</h1>
-<pre><code>刷题的时候遇到类型题会写一下题解，但不一定全部写，看心情，争取每天一道leetcode，写了之后就会放入到这里
-</code></pre><h2 id="-">题解集合</h2>
-<ul>
-<li><p>优先队列</p>
-<p>  <a href="https://guixiaole.github.io/CSnote/leetcode/html/23">23题合并列表</a></p>
-</li>
-<li><p>回溯</p>
-<p>  <a href="https://guixiaole.github.io/CSnote/leetcode/html/79">79单词搜索</a></p>
-</li>
-<li><p>滑动窗口</p>
-	<p>  <a href="https://guixiaole.github.io/CSnote/leetcode/html/76">76最小覆盖子串</a></p>
-	</li>
-	<li><p>哈希</p>
-		<p>  <a href="https://guixiaole.github.io/CSnote/leetcode/html/123">123最长连续序列</a></p>
-		</li>
-		<li><p>单调栈</p>
-			<p>  <a href="https://guixiaole.github.io/CSnote/leetcode/html/84">84柱状图中最大的矩形</a></p>
-			</li>
-			<li><p>前缀和</p>
-				<p>  <a href="https://guixiaole.github.io/CSnote/leetcode/html/560">560和为k的子数组</a></p>
-				</li>
-</ul>
+            	<h1 id="560-k-">560. 和为 K 的子数组</h1>
+<h2 id="-">问题描述</h2>
+<p>给你一个整数数组 nums 和一个整数 k ，请你统计并返回 该数组中和为 k 的子数组的个数 。</p>
+<p>示例 1：</p>
+<p>输入：nums = [1,1,1], k = 2
+输出：2
+示例 2：</p>
+<p>输入：nums = [1,2,3], k = 3
+输出：2</p>
+<p>提示：</p>
+<p>1 &lt;= nums.length &lt;= 2 * 104
+-1000 &lt;= nums[i] &lt;= 1000
+-107 &lt;= k &lt;= 107</p>
+<h2 id="-">解决问题</h2>
+<h3 id="-">暴力破解</h3>
+<p>此题其实可以通过暴力破解，设每次以i结尾，[j...i]为连续子数组中的和为k。
+双层for循环，每次循环到i时，向前探查到j，寻找到nums[j...i]==k。此种解法的时间复杂度为$O(N^2)$,空间复杂度为O(N)。因代码太简单，我就不贴出来了。</p>
+<h3 id="-">前缀和算法</h3>
+<p>前缀和在我的理解是用数组存储前i个原数组中的和，即$pre[i]=pre[i-1]+nums[i]$其中pre即为前缀和数组，对于本题中的算法，可以进行一定变形。假设nums[j...i]==k则$pre[i]-pre[j-1]==k$则$pre[j-1]=pre[i]-k$,因此本题可以简化到找到pre[j-1]即可，已知pre[i]是已知的，将pre[i]存储到hashmap中，每次循环中找到pre[i]-k==hashmap.getkey(pre[i]-k)。代码如下。</p>
+<pre><code class="lang-Java">class Solution {
+    public int subarraySum(int[] nums, int k) {
+           int res = 0;
+            int preSum=0;
+            Map&lt;Integer,Integer&gt;map = new HashMap&lt;&gt;();
+            map.put(0,1);
+            for (int i = 0;i&lt;nums.length;i++) {
+                preSum = preSum+nums[i];
+                res += map.getOrDefault(preSum-k,0);
+                map.put(preSum,map.getOrDefault(preSum,0)+1);
+            }
+            return res;
+    }
+}
+</code></pre>
+<p>上述代码中，有一种重要的一点就是，首先在map中存储了(0,1)。可以认为下标 0 之前没有元素，可以认为前缀和为 0，个数为 1 个。</p>
+<p>以上算法是对前缀和进行了优化，使用了hashmap存储，如果没用hashmap存储，前缀和算法解此题同样时间复杂度为$O(N^2)$,但思路和暴力破解想法差不多。</p>
 
           	</article>
         </div>
